@@ -147,12 +147,12 @@ const DrawImage = () => {
           <div style={{display:"inline-block"}}>
             <div style={{width:"500px",borderWidth:"1px", borderStyle:"solid"}}>
               <form onSubmit={handleRigging}>
-                <input  {...workDistance} placeholder="vertical"/>
-                <input  {...workHeight} placeholder="height"/>
-                <input  {...workWeight} placeholder="workWeight"/>
-                <input  {...blockDistanceInput} placeholder="vertical1"/>
-                <input  {...blockHeightInput} placeholder="height1"/>
-                <input  {...enoughDistance } placeholder="vertical2"/>
+                <input  {...workDistance} placeholder="작업 거리"/>
+                <input  {...workHeight} placeholder="작업 높이"/>
+                <input  {...workWeight} placeholder="작업 무게"/>
+                <input  {...blockDistanceInput} placeholder="장애물 거리"/>
+                <input  {...blockHeightInput} placeholder="장애물 높이"/>
+                <input  {...enoughDistance } placeholder="여윳거리"/>
                 <input type="submit" value="Submit" />
               </form>
             </div>
