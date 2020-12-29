@@ -46,5 +46,11 @@ export const CRANE_DATA_FRAGMENT = gql`
       vertical2
       height2
     }
+    edgeDistance {
+      mainToBlock,
+      mainToBuilding,
+      flyFixLuffingToBlock,
+      flyFixLuffingToBuilding,
+    }
   }
   `;

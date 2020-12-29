@@ -14,7 +14,8 @@ function App() {
             headers: { Authorization: `Bearer ${token}` }
           });
         },
-        uri: "http://localhost:4000"
+        uri: "http://localhost:4000",
+        // uri: "http://192.168.0.150:4000",
         // uri: "http://61.83.147.71:4000"
       });
       setClient(client);
