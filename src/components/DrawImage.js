@@ -18,10 +18,15 @@ const DrawImage = () => {
   const [safeFactor, setSafeFactor] = useState("85");
   const [craneLocation, setCraneLocation] = useState("back");
 
-  const dummyData = "{\r\n        \"craneName\": \"L_1750_9.1\",\r\n        \"craneCode\": \"TYVEN\",\r\n        \"craneModeName\": \"LUFFING\",\r\n        \"excelSheetName\": \"TYVEN_204t_t_198_007_01401\",\r\n        \"craneData\": {\r\n          \"mainBoom\": 49.1,\r\n          \"mainAngle\": 84,\r\n          \"totalExtLength\": 9,\r\n          \"adapter1\": 4,\r\n          \"extBoom1\": 5,\r\n          \"extBoom2\": 0,\r\n          \"extBoom3\": 0,\r\n          \"extBoom4\": 0,\r\n          \"adapter2\": 0,\r\n          \"flyFixLuffing\": 70,\r\n          \"flyFixLuffingAngle\": 15.700000000000003,\r\n          \"distance1\": 6.1,\r\n          \"distance2\": 25.9,\r\n          \"craneDistance\": 8.33,\r\n          \"centerToBuildingDistance\": 27,\r\n          \"centerToBlockDistance\": 27,\r\n          \"craneToBuildingDistance\": 18.7,\r\n          \"craneToBlockDistance\": 18.7,\r\n          \"totalDistance\": 32,\r\n          \"tableDistance\": 32,\r\n          \"height1\": 57.8,\r\n          \"height2\": 65,\r\n          \"totalHeight\": 124.8,\r\n          \"marginHeight\": 8.8,\r\n          \"workingArea\": 360,\r\n          \"tableWeight\": 26.1,\r\n          \"counterWeight\": \"204\",\r\n          \"overRear\": \"x\",\r\n          \"optional\": \"x\",\r\n          \"safetyFactor\": 81.4,\r\n          \"craneLocation\": \"back\",\r\n          \"workWeight\": 25,\r\n          \"workBuilding\": {\r\n            \"horizontal\": 5,\r\n            \"vertical\": 5,\r\n            \"height\": 110\r\n          },\r\n          \"block\": {\r\n            \"vertical1\": 0,\r\n            \"horizontal1\": 0,\r\n            \"height1\": 0,\r\n            \"vertical2\": 0,\r\n            \"height2\": 0\r\n          }\r\n        }\r\n      }";
+  // const dummyData = "{\r\n        \"craneName\": \"L_1750_9.1\",\r\n        \"craneCode\": \"TYVEN\",\r\n        \"craneModeName\": \"LUFFING\",\r\n        \"excelSheetName\": \"TYVEN_204t_t_198_007_01401\",\r\n        \"craneData\": {\r\n          \"mainBoom\": 49.1,\r\n          \"mainAngle\": 84,\r\n          \"totalExtLength\": 9,\r\n          \"adapter1\": 4,\r\n          \"extBoom1\": 5,\r\n          \"extBoom2\": 0,\r\n          \"extBoom3\": 0,\r\n          \"extBoom4\": 0,\r\n          \"adapter2\": 0,\r\n          \"flyFixLuffing\": 70,\r\n          \"flyFixLuffingAngle\": 15.700000000000003,\r\n          \"distance1\": 6.1,\r\n          \"distance2\": 25.9,\r\n          \"craneDistance\": 8.33,\r\n          \"centerToBuildingDistance\": 27,\r\n          \"centerToBlockDistance\": 27,\r\n          \"craneToBuildingDistance\": 18.7,\r\n          \"craneToBlockDistance\": 18.7,\r\n          \"totalDistance\": 32,\r\n          \"tableDistance\": 32,\r\n          \"height1\": 57.8,\r\n          \"height2\": 65,\r\n          \"totalHeight\": 124.8,\r\n          \"marginHeight\": 8.8,\r\n          \"workingArea\": 360,\r\n          \"tableWeight\": 26.1,\r\n          \"counterWeight\": \"204\",\r\n          \"overRear\": \"x\",\r\n          \"optional\": \"x\",\r\n          \"safetyFactor\": 81.4,\r\n          \"craneLocation\": \"back\",\r\n          \"workWeight\": 25,\r\n          \"workBuilding\": {\r\n            \"horizontal\": 5,\r\n            \"vertical\": 5,\r\n            \"height\": 110\r\n          },\r\n          \"block\": {\r\n            \"vertical1\": 0,\r\n            \"horizontal1\": 0,\r\n            \"height1\": 0,\r\n            \"vertical2\": 0,\r\n            \"height2\": 0\r\n          }\r\n        }\r\n      }";
   const GET_CRANEIMGAGEV2 = gql`
     mutation getCraneImageV2($craneData: String!) {
       getCraneImageV2(craneData: $craneData)
+    }
+  `;
+  const GET_CRANEIMAGEV3 = gql`
+    mutation getCraneImageV3($craneData: TotalCraneDataInput!) {
+      getCraneImageV3(craneData: $craneData)
     }
   `;
   const GET_CRANE_LIST_V2 = gql`
@@ -49,38 +54,51 @@ const DrawImage = () => {
     }
   }
   ${CRANE_DATA_FRAGMENT}
-`;
+  `;
 
   const [CraneDataV2Mutation] = useMutation(GET_CRANEIMGAGEV2, {
-    variables: { craneData: dummyData}
+    variables: { }
+  });
+  const [CraneDataV3Mutation] = useMutation(GET_CRANEIMAGEV3, {
+    variables: { }
   });
   const [craneListMutation] = useMutation(GET_CRANE_LIST_V2, {
     variables: {
     },
   });
 
-  const onClick = async () => {
-    setLoading(true);
-    try {
-      const {
-        data: { getCraneImageV2: imageData }
-      } = await CraneDataV2Mutation();
-      setcraneImage( imageData );
-    } catch(e) {
-      console.log(e);
-      alert("Image loading error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const onClick = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const {
+  //      data: { getCraneImageV2: imageData }
+  //     } = await CraneDataV2Mutation();
+  //     
+  //     setcraneImage( imageData );
+  //   } catch(e) {
+  //     console.log(e);
+  //     alert("Image loading error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const loadImageHandler = async (crane, e) => {
     setLoading(true);
     try {
       console.log("뮤테이션시작2")
       console.log(crane);
+      delete crane.__typename;
+      delete crane.craneData.__typename;
+      delete crane.craneData.block.__typename;
+      delete crane.craneData.workBuilding.__typename;
+      delete crane.craneData.edgeDistance.__typename;
+      
+      // const {
+      //   data: { getCraneImageV3: imageData }
+      // } = await CraneDataV3Mutation({variables: { craneData: JSON.stringify(crane) }});
       const {
-        data: { getCraneImageV2: imageData }
-      } = await CraneDataV2Mutation({variables: { craneData: JSON.stringify(crane) }});
+        data: { getCraneImageV3: imageData }
+      } = await CraneDataV3Mutation({variables: { craneData: crane }});
       setcraneImage( imageData );
       
       console.log("뮤테이션끝2")
