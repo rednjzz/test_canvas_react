@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 import DrawImgae from './components/DrawImage';
+import useInput from "./hooks/useInput";
+
 function App() {
   const [client, setClient] = useState(null);
+  const selectInput = useInput("");
+  const [serverUrl, setServerUrl] = useState("http://localhost:4000");
 
   const preLoad = async () => {
     try{
@@ -14,7 +18,7 @@ function App() {
             headers: { Authorization: `Bearer ${token}` }
           });
         },
-        uri: "http://localhost:4000",
+        uri: serverUrl,
         // uri: "http://192.168.0.150:4000",
         // uri: "http://61.83.147.71:4000"
       });
@@ -25,13 +29,28 @@ function App() {
   }
   useEffect(() => {
     preLoad();
-  }, [])
-  
+  }, [serverUrl])
+  const submitHandler= (evt) => {
+    evt.preventDefault();
+    setServerUrl(selectInput.value);
+    console.log(selectInput.value);
+  }
   return (
     client !== null ? (
       <div className="App">
       <ApolloProvider client={client}>
-          <DrawImgae/>
+      <form onSubmit={submitHandler}>
+        <label for="server-ip">Choose a Server:</label>
+        <select {...selectInput} name="server-ip">
+          <option value="http://localhost:4000">Localhost</option>
+          <option value="http://192.168.0.150:4000">MacPro</option>
+          <option value="http://61.83.147.71:4000">HP Server</option>
+        </select>
+        <input type="submit" value="Submit"></input>
+      </form>
+      <h1>현재접속 서버 </h1>
+      <h1>{serverUrl}</h1>
+        <DrawImgae/>  
       </ApolloProvider>
     </div>  
     ): null

@@ -187,6 +187,9 @@ const DrawImage = () => {
               <img alt="crane 이미지" style={{width:"500px"}} src={craneImage}/>
             </div>}
           </div>
+          <div>
+            
+          </div>
       </div>
     </>
   )
